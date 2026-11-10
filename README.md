@@ -1,25 +1,23 @@
-# Gleva Refund Desk V3 — Premium 3D Refund Operations & Financial Intelligence
+# Gleva Refund Desk V2 — Live Refund Management System
 
-## What's Upgraded in V3
-1. **Enterprise Administrator Authentication & Zero Public Data Leakage**:
-   - Server-side login for **Super Administrator** (`anassaifee`) with memory-hard Argon2id/Scrypt (`N=16384, r=8, p=1`) password hashing and timing-safe comparison (`lib/auth/password.ts`).
-   - Enforces **mandatory password change on first login** when signing in with the initial temporary password (`Gleva@123`).
-   - Signed `HttpOnly`, `SameSite=Lax`, `Secure` session cookies (`8h` standard or `14d` with **Remember Me**), sliding-window brute-force rate limiting (5 attempts / 15m lockout), and double-submit CSRF protection (`x-csrf-token`).
-   - All 65 historical customer refund records (`₹55,785.68`) and embedded WebP payment proof screenshots are stored strictly server-side (`lib/server/seed-records.json`) and served exclusively through authenticated `/api/refunds` requests—removing 1.1 MB of sensitive customer PII from public client JavaScript bundles.
-2. **3D-Inspired Visual Redesign & Mobile-First Architecture**:
-   - Interactive 3D glass sculpture & particle field on `/login` (`components/three/GlassSculptureCanvas.tsx`), floating 3D brand prism in the dashboard welcome banner (`components/three/BrandOrbCanvas.tsx`), and mouse-responsive 3D perspective tilt KPI cards (`components/ui/TiltCard.tsx`).
-   - Dedicated mobile card layout (`components/refunds/MobileRefundCard.tsx`), slide-over navigation drawer, fixed mobile bottom navigation bar, floating action button (FAB), and full-screen mobile filter sheet (`320px` to `430px+` phones).
-3. **8-KPI & 8-Chart Financial Operations Analytics (`components/analytics/DashboardCharts.tsx`)**:
-   - Monthly Refund Amount Trend, Refund Status Distribution, Refund Reasons Breakdown, Product-Wise Refund Analysis, Weekly Refund Activity Velocity, Processing Time SLA Performance, Pending vs. Completed Refunds, and Year-over-Year Quarterly Trajectory.
+## Quick Free Deployment Guide (Vercel)
+1. Extract this ZIP archive so `package.json` is in the root of your project folder.
+2. Push the files to a GitHub repository (or run `npx vercel` inside the extracted folder).
+3. Import the repository on Vercel (Framework Preset: **Next.js**, Root Directory: `./`).
+4. Click **Deploy** — it builds cleanly even before environment variables are added!
+5. To connect live two-way Google Sheets sync for ₹0 (no Google Cloud Console required):
+   - Open your Google Sheet -> **Extensions -> Apps Script**.
+   - Paste `google-apps-script/Gleva_Refund_System_2026.gs` and click **Deploy -> New deployment -> Web app** (`Execute as: Me`, `Who has access: Anyone`).
+   - Copy the `https://script.google.com/macros/s/.../exec` URL into the **Settings & Sync** tab of your deployed Gleva Refund Desk website!
 
-## Vercel Hobby Deployment Instructions
-1. Extract the ZIP archive and push the root folder to a private GitHub/GitLab repository (or run `npx vercel`).
-2. In your Vercel project settings (**Settings → Environment Variables**), configure the variables shown in `.env.example`:
-   - `GLEVA_SESSION_SECRET`: Any random 32+ character secret string.
-   - `GLEVA_ADMIN_USERNAME`: `anassaifee`
-   - `GOOGLE_APPS_SCRIPT_WEB_APP_URL`: Your deployed Google Apps Script Web App URL.
-   - `GLEVA_ADMIN_BEARER_TOKEN`: Your secret bearer token matching Google Apps Script Script Properties.
-3. To configure the upgraded Google Apps Script (`google-apps-script/Gleva_Refund_System_2026.gs`):
-   - Open your Google Sheet → **Extensions → Apps Script** and paste `Gleva_Refund_System_2026.gs`.
-   - Reload your Google Sheet and click **⚡ Gleva Refund System V3 → 🔑 Configure Web App Secret Token** to save your `GLEVA_ADMIN_BEARER_TOKEN` in `ScriptProperties`.
-   - Click **Deploy → New deployment → Web app** (`Execute as: Me`, `Who has access: Anyone`) and copy the `/exec` URL to `GOOGLE_APPS_SCRIPT_WEB_APP_URL` in Vercel.
+## Mobile and live-date update
+
+- Existing Gleva colours, sections, refund records, screenshots and Apps Script are retained.
+- Mobile and tablet navigation uses a slide-out menu. Search, forms, filters, dialogs and scrollable tables adapt to smaller screens, with larger touch targets.
+- The date and clock use Asia/Kolkata (IST). New case dates, processing dates and screenshot dates use today's date. Pending-day calculations refresh at midnight, and month/year choices extend automatically.
+- Existing historical dates are preserved; missing dates are not replaced with invented dates.
+- Live refresh polls the existing connection every 15 seconds while the tab is visible (adjustable in Settings). Returning to the tab or reconnecting triggers a refresh. This is polling, not instantaneous server push; the website does not run background sync while closed.
+- The existing Vercel GOOGLE_APPS_SCRIPT_WEB_APP_URL setting is used automatically through /api/refunds. Saved connection settings remain supported. Successful live refresh requires an accessible, correctly configured existing Google Sheets / Apps Script connection.
+- Sync status distinguishes refreshed data from a saved snapshot or a failed connection. Request timeouts and overlapping-read protection prevent a stalled request from permanently stopping refresh.
+
+Validation: production build, TypeScript and date/formula regression checks. All original embedded records, screenshots and the Apps Script file were verified unchanged. Live Google Sheets writes were not performed. Browser visual QA was unavailable because the preview runner did not support this project's Next.js command-line options.

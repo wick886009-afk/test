@@ -1,8 +1,8 @@
 {
-  "name": "gleva-refund-desk-v3",
-  "version": "3.0.0",
+  "name": "gleva-refund-desk-v2",
+  "version": "2.1.0",
   "private": true,
-  "description": "Gleva Cosmetics V3 — Premium 3D Refund Operations, Secure Login & Live Google Sheets Intelligence",
+  "description": "Gleva Cosmetics Live Refund Management System — Free Vercel Hobby Edition",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
